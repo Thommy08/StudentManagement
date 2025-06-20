@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="trabalhoLAB.Dashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:trabalhoLAB">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Cards de estatísticas -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource ModernCardStyle}" Margin="8">
+                    <StackPanel>
+                        <TextBlock Text="Total de Alunos" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AppText}"/>
+                        <TextBlock x:Name="TotalAlunosCounter" Text="0" FontWeight="Bold" Foreground="{DynamicResource AppAccent}" FontSize="36" Margin="0,10,0,5"/>
+                        <TextBlock Text="Registrados no sistema" Foreground="{DynamicResource AppTextSecondary}" FontSize="12"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource ModernCardStyle}" Margin="8">
+                    <StackPanel>
+                        <TextBlock Text="Total de Grupos" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AppText}"/>
+                        <TextBlock x:Name="TotalGruposCounter" Text="0" FontWeight="Bold" Foreground="{DynamicResource AppAccent}" FontSize="36" Margin="0,10,0,5"/>
+                        <TextBlock Text="Grupos de trabalho" Foreground="{DynamicResource AppTextSecondary}" FontSize="12"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource ModernCardStyle}" Margin="8">
+                    <StackPanel>
+                        <TextBlock Text="Tarefas Criadas" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AppText}"/>
+                        <TextBlock x:Name="TotalTarefasCounter" Text="0" FontWeight="Bold" Foreground="{DynamicResource AppAccent}" FontSize="36" Margin="0,10,0,5"/>
+                        <TextBlock Text="Tarefas de avaliação" Foreground="{DynamicResource AppTextSecondary}" FontSize="12"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Tabela de próximas tarefas -->
+            <Border Grid.Row="1" Style="{StaticResource ModernCardStyle}" Margin="0,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Próximas Tarefas" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource AppText}" Margin="0,0,0,15"/>
+
+                    <DataGrid x:Name="TarefasDataGrid" Grid.Row="1" Style="{StaticResource ModernDataGridStyle}"
+                              AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Título" Width="*" Binding="{Binding Titulo}"/>
+                            <DataGridTextColumn Header="Início" Width="120" Binding="{Binding DataInicio, StringFormat=dd/MM/yyyy}"/>
+                            <DataGridTextColumn Header="Término" Width="120" Binding="{Binding DataEntrega, StringFormat=dd/MM/yyyy}"/>
+                            <DataGridTextColumn Header="Peso" Width="80" Binding="{Binding Peso}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

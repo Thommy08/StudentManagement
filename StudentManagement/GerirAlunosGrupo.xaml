@@ -1,0 +1,240 @@
+﻿<UserControl x:Class="trabalhoLAB.GerirAlunosGrupo"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:local="clr-namespace:trabalhoLAB"
+     mc:Ignorable="d"
+     Background="{DynamicResource AppBackground}">
+    <UserControl.Resources>
+        <!-- Estilo para os botões - Adaptado para Dark/Light Mode -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource AppAccent}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#00B397"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#009D85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para TextBox -->
+        <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource AppInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorder}"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="TextBoxBorder" 
+                               Background="{TemplateBinding Background}"
+                               CornerRadius="6"
+                               BorderThickness="{TemplateBinding BorderThickness}"
+                               BorderBrush="{TemplateBinding BorderBrush}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="TextBoxBorder" Property="BorderBrush" Value="{DynamicResource AppAccent}"/>
+                                <Setter TargetName="TextBoxBorder" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TextBoxBorder" Property="BorderBrush" Value="{DynamicResource AppAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="TextBoxBorder" Property="Opacity" Value="0.7"/>
+                                <Setter Property="Foreground" Value="{DynamicResource AppTextSecondary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para ListBox -->
+        <Style x:Key="ModernListBoxStyle" TargetType="ListBox">
+            <Setter Property="Background" Value="{DynamicResource AppCard}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <!-- Estilo para os itens do ListBox -->
+        <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="Background" Value="{DynamicResource AppCard}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,0,0,1">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource AppPrimary}"/>
+                                <Setter Property="TextElement.Foreground" Value="{DynamicResource AppTextOnPrimary}"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource AppHover}"/>
+                                <Setter Property="TextElement.Foreground" Value="{DynamicResource AppText}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Estilo para cards - Adaptado para Dark/Light Mode -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource AppCard}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#20000000" BlurRadius="15" ShadowDepth="1" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Cabeçalho -->
+            <TextBlock x:Name="LblTitulo" Grid.Row="0" Text="Gerir Alunos do Grupo" 
+                   FontSize="24" FontWeight="Bold" Margin="0,0,0,20"
+                   Foreground="{DynamicResource AppText}"/>
+
+            <!-- Pesquisa -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,15">
+                <TextBlock Text="Pesquisar alunos disponíveis:" FontWeight="SemiBold" Margin="0,0,0,5" 
+                           Foreground="{DynamicResource AppText}"/>
+                <TextBox x:Name="TxtPesquisaAlunos" Style="{StaticResource ModernTextBoxStyle}" 
+                     TextChanged="TxtPesquisaAlunos_TextChanged" Margin="0,0,0,10" Height="52"/>
+            </StackPanel>
+
+            <!-- Listas de alunos -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Lista de alunos disponíveis -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Alunos Disponíveis" FontWeight="SemiBold" Margin="0,0,0,10"
+                               Foreground="{DynamicResource AppText}"/>
+                    <ListBox x:Name="LstAlunosSemGrupo" Grid.Row="1" Style="{StaticResource ModernListBoxStyle}"
+                         ItemContainerStyle="{StaticResource ListBoxItemStyle}" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Numero, StringFormat='Nº {0}'}" FontWeight="SemiBold" Foreground="{DynamicResource AppText}"/>
+                                    <TextBlock Text="{Binding Nome}" Margin="0,3,0,0" Foreground="{DynamicResource AppText}"/>
+                                    <TextBlock Text="{Binding Email}" FontSize="11" Foreground="{DynamicResource AppTextSecondary}" Margin="0,3,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+                <!-- Botões de ação -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0">
+                    <Button x:Name="BtnAdicionarAluno" Content="→" FontSize="20" Width="50" 
+                        Style="{StaticResource ActionButtonStyle}" Margin="5,10"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="BtnAdicionarAluno_Click">
+                    </Button>
+                    <Button x:Name="BtnRemoverAluno" Content="←" FontSize="20" Width="50" 
+                        Style="{StaticResource ActionButtonStyle}" Margin="5,10"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="BtnRemoverAluno_Click">
+                    </Button>
+                </StackPanel>
+
+                <!-- Lista de alunos do grupo -->
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Alunos do Grupo" FontWeight="SemiBold" Margin="0,0,0,10"
+                               Foreground="{DynamicResource AppText}"/>
+                    <ListBox x:Name="LstAlunosDoGrupo" Grid.Row="1" Style="{StaticResource ModernListBoxStyle}"
+                         ItemContainerStyle="{StaticResource ListBoxItemStyle}" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Numero, StringFormat='Nº {0}'}" FontWeight="SemiBold" Foreground="{DynamicResource AppText}"/>
+                                    <TextBlock Text="{Binding Nome}" Margin="0,3,0,0" Foreground="{DynamicResource AppText}"/>
+                                    <TextBlock Text="{Binding Email}" FontSize="11" Foreground="{DynamicResource AppTextSecondary}" Margin="0,3,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Grid>
+
+            <!-- Rodapé -->
+            <Grid Grid.Row="3" Margin="0,15,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:Name="LblTotalAlunos" Grid.Column="0" Text="Total de alunos no grupo: 0" 
+                       VerticalAlignment="Center" FontWeight="SemiBold"
+                       Foreground="{DynamicResource AppText}"/>
+
+                <Button x:Name="BtnFechar" Grid.Column="1" Content="Fechar" Width="100" 
+                    Style="{StaticResource ActionButtonStyle}" Click="BtnFechar_Click"
+                    Background="{DynamicResource AppError}" Foreground="White">
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

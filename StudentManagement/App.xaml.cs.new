@@ -1,0 +1,179 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Windows;
+using System.Xml.Serialization;
+using labmockups.MODELS;
+
+namespace trabalhoLAB
+{
+    public partial class App : Application
+    {
+        // Private fields for data management
+        private static Professor _professorAtual;
+        private static ObservableCollection<Aluno> _listaAlunos;
+        private static ObservableCollection<Grupo> _listaGrupos;
+        private static bool _isLoggedIn = false;
+
+        // File paths for data persistence
+        private static readonly string _appDataPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "trabalhoLAB");
+        private static readonly string _alunosFilePath;
+        private static readonly string _gruposFilePath;
+        private static readonly string _professorFilePath;
+
+        // Static constructor to initialize paths and collections
+        static App()
+        {
+            // Create app data directory if it doesn't exist
+            if (!Directory.Exists(_appDataPath))
+            {
+                Directory.CreateDirectory(_appDataPath);
+            }
+
+            // Initialize file paths
+            _alunosFilePath = Path.Combine(_appDataPath, "alunos.xml");
+            _gruposFilePath = Path.Combine(_appDataPath, "grupos.xml");
+            _professorFilePath = Path.Combine(_appDataPath, "professor.xml");
+
+            // Initialize collections
+            _listaAlunos = new ObservableCollection<Aluno>();
+            _listaGrupos = new ObservableCollection<Grupo>();
+        }
+
+        // Public properties
+        public static bool IsLoggedIn
+        {
+            get => _isLoggedIn;
+            set => _isLoggedIn = value;
+        }
+
+        public static Professor ProfessorAtual
+        {
+            get
+            {
+                if (_professorAtual == null)
+                {
+                    _professorAtual = new Professor();
+                }
+                return _professorAtual;
+            }
+            set => _professorAtual = value;
+        }
+
+        public static ObservableCollection<Aluno> ListaAlunos => _listaAlunos;
+        public static ObservableCollection<Grupo> ListaGrupos => _listaGrupos;
+
+        // Session management methods
+        public static void LimparDadosSessao()
+        {
+            _professorAtual = new Professor();
+            _listaAlunos.Clear();
+            _listaGrupos.Clear();
+            IsLoggedIn = false;
+
+            // Delete saved professor data
+            if (File.Exists(_professorFilePath))
+            {
+                try
+                {
+                    File.Delete(_professorFilePath);
+                }
+                catch
+                {
+                    // Ignore deletion errors
+                }
+            }
+        }
+
+        public static void SalvarDadosProfessor()
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(Professor));
+                using (var writer = new StreamWriter(_professorFilePath))
+                {
+                    serializer.Serialize(writer, ProfessorAtual);
+                }
+
+                IsLoggedIn = !string.IsNullOrEmpty(ProfessorAtual.Email);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao salvar dados do professor: {ex.Message}",
+                    "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private static void CarregarDadosProfessor()
+        {
+            if (File.Exists(_professorFilePath))
+            {
+                try
+                {
+                    var serializer = new XmlSerializer(typeof(Professor));
+                    using (var reader = new StreamReader(_professorFilePath))
+                    {
+                        _professorAtual = (Professor)serializer.Deserialize(reader);
+                        IsLoggedIn = !string.IsNullOrEmpty(_professorAtual.Email);
+                    }
+                }
+                catch
+                {
+                    LimparDadosSessao();
+                }
+            }
+        }
+
+        // Application startup
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            
+            // Start with a clean session
+            LimparDadosSessao();
+
+            // Generate sample data if needed
+            if (_listaAlunos.Count == 0)
+            {
+                GerarDadosAmostra();
+            }
+        }
+
+        // Sample data generation
+        private static void GerarDadosAmostra()
+        {
+            if (_listaAlunos.Count == 0)
+            {
+                var alunos = new List<Aluno>
+                {
+                    new Aluno { Nome = "João Silva", Email = "joao@email.com", Numero = "A001" },
+                    new Aluno { Nome = "Maria Santos", Email = "maria@email.com", Numero = "A002" }
+                };
+
+                foreach (var aluno in alunos)
+                {
+                    _listaAlunos.Add(aluno);
+                }
+            }
+
+            if (_listaGrupos.Count == 0)
+            {
+                var grupos = new List<Grupo>
+                {
+                    new Grupo { Nome = "Grupo 1" },
+                    new Grupo { Nome = "Grupo 2" }
+                };
+
+                foreach (var grupo in grupos)
+                {
+                    _listaGrupos.Add(grupo);
+                }
+            }
+        }
+    }
+}
+

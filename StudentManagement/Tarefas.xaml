@@ -1,0 +1,337 @@
+﻿<UserControl x:Class="trabalhoLAB.Tarefas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:trabalhoLAB"
+        mc:Ignorable="d"
+        Background="{DynamicResource AppBackground}">
+
+    <UserControl.Resources>
+        <!-- Estilo para TextBox -->
+        <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource AppInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorder}"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="TextBoxBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" 
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="TextBoxBorder" Property="BorderBrush" Value="{DynamicResource AppAccent}"/>
+                                <Setter TargetName="TextBoxBorder" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="TextBoxBorder" Property="Opacity" Value="0.7"/>
+                                <Setter Property="Foreground" Value="{DynamicResource AppTextSecondary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para TextBlock labels -->
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+            <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+        </Style>
+
+        <!-- Estilo para DataGrid -->
+        <Style x:Key="ModernDataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="{DynamicResource AppCard}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="{DynamicResource AppCard}"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource AppAltRow}"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource AppBorder}"/>
+            <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource AppBorder}"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserReorderColumns" Value="True"/>
+            <Setter Property="CanUserResizeColumns" Value="True"/>
+            <Setter Property="CanUserSortColumns" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="ColumnHeaderHeight" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- Estilo para botões de ação -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource AppAccent}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}"
+                                BorderThickness="0">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#20000000" BlurRadius="5" ShadowDepth="1" Opacity="0.3"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#00B397"/>
+                                <Setter TargetName="ButtonBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#30000000" BlurRadius="8" ShadowDepth="2" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#009D85"/>
+                                <Setter TargetName="ButtonBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#20000000" BlurRadius="4" ShadowDepth="1" Opacity="0.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#888888"/>
+                                <Setter TargetName="ButtonBorder" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="BorderThickness" Value="2"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#4DFFE6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para botão de exclusão -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Background" Value="{DynamicResource AppError}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D32F2F"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#B71C1C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para DatePicker -->
+        <Style x:Key="ModernDatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Background" Value="{DynamicResource AppInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Estilo para os botões da sidebar -->
+        <Style x:Key="SidebarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="15,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="1"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#202035"/>
+                                <Setter Property="Opacity" Value="1.0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#101020"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="BorderThickness" Value="1"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Logo/Título da aplicação -->
+            <StackPanel Grid.Row="0" VerticalAlignment="Center" Margin="20,0,0,0">
+                <TextBlock Text="Sistema de Gestão" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource AppText}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Conteúdo da Gestão de Tarefas -->
+        <Grid Grid.Row="1" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Formulário para Adicionar/Editar Tarefa -->
+            <Border Grid.Column="0" Style="{StaticResource ModernCardStyle}" Margin="0,0,20,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Detalhes da Tarefa" FontSize="18" FontWeight="Bold" 
+                               Margin="0,0,0,15" Foreground="{DynamicResource AppText}"/>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="ID" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtId" Style="{StaticResource ModernTextBoxStyle}" Height="52" IsReadOnly="True"/>
+
+                            <TextBlock Text="Título" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtTitulo" Height="52" Style="{StaticResource ModernTextBoxStyle}"/>
+
+                            <TextBlock Text="Descrição" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtDescricao" Style="{StaticResource ModernTextBoxStyle}" 
+                                     Height="80" TextWrapping="Wrap" AcceptsReturn="True"
+                                     VerticalContentAlignment="Top"/>
+
+                            <TextBlock Text="Data Início" Style="{StaticResource FieldLabelStyle}"/>
+                            <DatePicker x:Name="DpDataInicio" Style="{StaticResource ModernDatePickerStyle}"/>
+
+                            <TextBlock Text="Hora Início (opcional)" Style="{StaticResource FieldLabelStyle}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="TxtHoraInicio" Grid.Column="0" Style="{StaticResource ModernTextBoxStyle}" 
+                                         Text="00" MaxLength="2" PreviewTextInput="NumberValidationTextBox" Height="52"
+                                         HorizontalContentAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text=":" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AppText}" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtMinutoInicio" Grid.Column="2" Style="{StaticResource ModernTextBoxStyle}" 
+                                         Text="00" MaxLength="2" PreviewTextInput="NumberValidationTextBox" Height="52"
+                                         HorizontalContentAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock Text="Data Término" Style="{StaticResource FieldLabelStyle}"/>
+                            <DatePicker x:Name="DpDataTermino" Style="{StaticResource ModernDatePickerStyle}"/>
+
+                            <TextBlock Text="Hora Término (opcional)" Style="{StaticResource FieldLabelStyle}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="TxtHoraTermino" Grid.Column="0" Style="{StaticResource ModernTextBoxStyle}" 
+                                         Text="23" MaxLength="2" PreviewTextInput="NumberValidationTextBox" Height="52"
+                                         HorizontalContentAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text=":" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AppText}" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtMinutoTermino" Grid.Column="2" Style="{StaticResource ModernTextBoxStyle}" 
+                                         Text="59" MaxLength="2" PreviewTextInput="NumberValidationTextBox" Height="52"
+                                         HorizontalContentAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock Text="Peso (em %)" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="TxtPeso" Style="{StaticResource ModernTextBoxStyle}" 
+                                     PreviewTextInput="NumberValidationTextBox" Height="52"/>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                        <Button x:Name="BtnNovo" Content="Novo" Style="{StaticResource ActionButtonStyle}" Click="BtnNovo_Click"/>
+                        <Button x:Name="BtnSalvar" Content="Salvar" Style="{StaticResource ActionButtonStyle}" Click="BtnSalvar_Click"/>
+                        <Button x:Name="BtnExcluir" Content="Excluir" Style="{StaticResource DeleteButtonStyle}" Click="BtnExcluir_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Lista de Tarefas -->
+            <Border Grid.Column="1" Style="{StaticResource ModernCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Lista de Tarefas" FontSize="18" FontWeight="Bold" 
+                               Margin="0,0,0,15" Foreground="{DynamicResource AppText}"/>
+
+                    <DataGrid x:Name="DgTarefas" Grid.Row="1" Style="{StaticResource ModernDataGridStyle}" 
+                              SelectionChanged="DgTarefas_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Width="60" Binding="{Binding Id}"/>
+                            <DataGridTextColumn Header="Título" Width="*" Binding="{Binding Titulo}"/>
+                            <DataGridTextColumn Header="Data Início" Width="120" Binding="{Binding DataInicio, StringFormat=dd/MM/yyyy}"/>
+                            <DataGridTextColumn Header="Data Término" Width="120" Binding="{Binding DataEntrega, StringFormat=dd/MM/yyyy}"/>
+                            <DataGridTextColumn Header="Peso (%)" Width="80" Binding="{Binding Peso}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

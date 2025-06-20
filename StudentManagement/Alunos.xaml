@@ -1,0 +1,231 @@
+﻿<!-- CORREÇÃO COMPLETA DO ALUNOS.XAML PARA DARK MODE -->
+
+<UserControl x:Class="trabalhoLAB.Alunos"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:trabalhoLAB"
+        mc:Ignorable="d"
+        Background="{DynamicResource AppBackground}" Height="600">
+
+    <UserControl.Resources>
+        <!-- REMOVIDOS OS ESTILOS DUPLICADOS - USAR OS DO APP.XAML -->
+
+        <!-- Estilo customizado apenas para botão de remoção -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ModernButtonStyle}">
+            <Setter Property="Background" Value="{DynamicResource AppError}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}"
+                                BorderThickness="0">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#20000000" BlurRadius="5" ShadowDepth="1" Opacity="0.3"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                                <Setter TargetName="ButtonBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#30000000" BlurRadius="8" ShadowDepth="2" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#A93226"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para CheckBox -->
+        <Style x:Key="ModernCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+            <Setter Property="Background" Value="{DynamicResource AppInput}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorder}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="CheckBoxBorder" Grid.Column="0"
+                                    Width="16" Height="16"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="3"
+                                    Margin="0,0,8,0">
+                                <Path x:Name="CheckMark"
+                                      Width="10" Height="8"
+                                      Stretch="Fill"
+                                      Fill="{DynamicResource AppAccent}"
+                                      Data="M 1,4 L 4,7 L 9,1"
+                                      Stroke="{DynamicResource AppAccent}"
+                                      StrokeThickness="2"
+                                      Visibility="Collapsed"/>
+                            </Border>
+                            <ContentPresenter Grid.Column="1" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="CheckBoxBorder" Property="Background" Value="{DynamicResource AppAccent}"/>
+                                <Setter TargetName="CheckBoxBorder" Property="BorderBrush" Value="{DynamicResource AppAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBoxBorder" Property="BorderBrush" Value="{DynamicResource AppAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource AppTextSecondary}"/>
+                                <Setter TargetName="CheckBoxBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource AppBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Conteúdo Principal -->
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Cabeçalho do conteúdo -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Adicionar título se necessário -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Gestão de Alunos" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource AppText}"
+                               Margin="0,0,0,10"/>
+                    <TextBlock Text="Gerir lista de alunos do sistema" 
+                               FontSize="14" 
+                               Foreground="{DynamicResource AppTextSecondary}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Botões de ação -->
+            <Grid Grid.Row="1" Margin="0,20,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Botões de gestão -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="btnAdicionarAluno" 
+                            Content="Adicionar Aluno" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Click="btnAdicionarAluno_Click"/>
+                    <Button x:Name="btnEditarAluno" 
+                            Content="Editar Selecionado" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Click="btnEditarAluno_Click"/>
+                    <Button x:Name="btnRemoverAluno" 
+                            Content="Remover" 
+                            Style="{StaticResource DeleteButtonStyle}" 
+                            Click="btnRemoverAluno_Click"/>
+                    <Button x:Name="btnImportarLista" 
+                            Content="Importar Lista (CSV/XLSX)" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Margin="20,5,5,5" 
+                            Click="btnImportarLista_Click"/>
+                </StackPanel>
+
+                <!-- Checkbox para selecionar todos os alunos -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <CheckBox x:Name="chkSelecionarTodos" 
+                              Content="Selecionar Todos" 
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="10,0,0,0" 
+                              VerticalAlignment="Center" 
+                              Click="chkSelecionarTodos_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Lista de alunos com Card Style -->
+            <Border Grid.Row="2" Style="{StaticResource ModernCardStyle}" Margin="0">
+                <DataGrid x:Name="AlunosDataGrid" 
+                          Style="{StaticResource ModernDataGridStyle}" 
+                          ItemsSource="{Binding ListaAlunos}" 
+                          AutoGenerateColumns="False" 
+                          Margin="0"
+                          Background="{DynamicResource AppCard}"
+                          BorderThickness="0">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Selecionar" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
+                                              HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Style="{StaticResource ModernCheckBoxStyle}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Número" Binding="{Binding Numero}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource AppText}"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
